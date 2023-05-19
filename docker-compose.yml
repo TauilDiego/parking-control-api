@@ -1,0 +1,40 @@
+version: "1.0"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tauildiego/parking-control
+    container_name: app
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+  db:
+    container_name: db
+    image: postgres:alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '4567:5432'
+    volumes:
+      - ./docker/postgresql:/var/lib/postgresql/data
+    networks:
+      - app-network
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "tauildiego@icloud.com"
+      PGADMIN_DEFAULT_PASSWORD: "12345678"
+    ports:
+      - "16543:80"
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
