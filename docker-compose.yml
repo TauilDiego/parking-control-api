@@ -6,7 +6,11 @@ services:
       dockerfile: Dockerfile
     image: tauildiego/parking-control
     container_name: app
+    env_file:
+      - ./env/prod.env
     restart: always
+    volumes:
+      - ./target/parking-control-0.0.1-SNAPSHOT.jar:/app/app.jar
     ports:
       - "8080:8080"
     networks:
